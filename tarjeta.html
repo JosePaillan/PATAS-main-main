@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FP&#128062;</title>
+    <style>
+        body {
+            background-image: url('img/foto111.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: white;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 20px;
+        }
+        form {
+            width: 50%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Registro de Tarjeta</h2>
+
+<div id="orderTotal"></div>
+
+<form id="cardRegistrationForm" onsubmit="saveCardData(event)">
+    <div class="form-group">
+        <label for="paymentType">Tipo de Pago:</label>
+        <select id="paymentType" name="paymentType" required>
+            <option value="creditCard">Tarjeta de Crédito</option>
+            <option value="debitCard">Tarjeta de Débito</option>
+            <option value="paypal">PayPal</option>
+            <option value="bankTransfer">Transferencia Bancaria</option>
+        </select>
+    </div>
+
+    <div id="cardDetails" style="display:none;">
+        <div class="form-group">
+            <label for="cardNumber">Número de Tarjeta:</label>
+            <input type="text" id="cardNumber" name="cardNumber" pattern="\d{16}" title="Debe contener 16 dígitos" required>
+        </div>
+        <div class="form-group">
+            <label for="expiryDate">Fecha de Expiración:</label>
+            <input type="month" id="expiryDate" name="expiryDate" required>
+        </div>
+        <div class="form-group">
+            <label for="cvv">CVV:</label>
+            <input type="text" id="cvv" name="cvv" pattern="\d{3}" title="Debe contener 3 dígitos" required>
+        </div>
+    </div>
+
+    <button type="submit" class="btn">PAGAR</button>
+</form>
+
+<script>
+    document.getElementById("paymentType").addEventListener("change", function() {
+        var cardDetails = document.getElementById("cardDetails");
+        if (this.value === "creditCard" || this.value === "debitCard") {
+            cardDetails.style.display = "block";
+        } else {
+            cardDetails.style.display = "none";
+        }
+    });
+
+    function displayOrderTotal() {
+        let total = localStorage.getItem('total');
+        document.getElementById("orderTotal").innerText = `Total del Pedido: $${total}`;
+    }
+
+    function saveCardData(event) {
+        event.preventDefault();
+        
+        let cardData = {
+            cardNumber: document.getElementById("cardNumber").value,
+            expiryDate: document.getElementById("expiryDate").value,
+            cvv: document.getElementById("cvv").value
+        };
+
+        // Guardar los datos de la tarjeta en localStorage
+        localStorage.setItem("cardData", JSON.stringify(cardData));
+
+        // Mostrar un mensaje de éxito y redirigir a la página principal
+        alert("¡Felicidades, tu compra se ha realizado con éxito!");
+        window.location.href = "menu.html";
+    }
+
+    // Mostrar el total del pedido al cargar la página
+    displayOrderTotal();
+</script>
+
+</body>
+</html>
